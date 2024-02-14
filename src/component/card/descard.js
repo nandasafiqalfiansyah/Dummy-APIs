@@ -45,7 +45,10 @@ function DesCard() {
             </Button>
           </div>
 
-          <div className="my-10">
+          <div
+            className="container  bg-gray-900 text-orange-500 my-10 mx-auto px-4 sm:px-6 lg:px-8"
+            style={{ overflow: "auto" }}
+          >
             <pre>{JSON.stringify(payloadData, null, 2)}</pre>
           </div>
         </>
