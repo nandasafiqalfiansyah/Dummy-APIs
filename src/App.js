@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import "./index.css";
+import NavbarDefault from "./component/Navbar/Nav";
+import FooterWithLogo from "./component/Footer/footer";
+import Home from "./component/Home";
+import Status404 from "./component/404/404";
+import SignCard from "./component/login/signin";
+import LoginCard from "./component/login/login";
+import DesCard from "./component/card/descard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <NavbarDefault />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<SignCard />} />
+        <Route path="/login" element={<LoginCard />} />
+        <Route path="/descard" element={<DesCard />} />
+        {/* <Route path="/reward" element={<Reward />} /> */}
+        <Route path="*" element={<Status404 to="/" />} />
+      </Routes>
+      <FooterWithLogo />
+    </Router>
   );
 }
 
