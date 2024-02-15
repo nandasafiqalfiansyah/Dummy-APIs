@@ -6,6 +6,7 @@ import Status404 from "./component/404/404";
 import SignCard from "./component/login/signin";
 import LoginCard from "./component/login/login";
 import DesCard from "./component/card/descard";
+import Dasboard from "./component/Dasboard/dasboard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
         <Route path="/signin" element={<SignCard />} />
         <Route path="/login" element={<LoginCard />} />
         <Route path="/descard" element={<DesCard />} />
-        {/* <Route path="/reward" element={<Reward />} /> */}
+        <Route path="/dashboard" element={<Dasboard />} />
         <Route path="*" element={<Status404 to="/" />} />
       </Routes>
       <FooterWithLogo />
