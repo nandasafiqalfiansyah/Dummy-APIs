@@ -4,7 +4,7 @@ const usePayloadData = () => {
   const [payloadData, setPayloadData] = useState([]);
 
   useEffect(() => {
-    fetch("https://dummy-api-umber.vercel.app/users/card")
+    fetch("https://rest-dummy-api.vercel.app/card")
       .then((response) => response.json())
       .then((data) => {
         setPayloadData(data.payload);

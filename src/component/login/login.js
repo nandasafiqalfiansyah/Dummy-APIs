@@ -23,6 +23,7 @@ export function LoginCard() {
   const [rememberMe, setRememberMe] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(!open);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!rememberMe) {
@@ -30,8 +31,9 @@ export function LoginCard() {
     } else {
       try {
         await loginUser(username, password);
+        localStorage.setItem("username", username);
         console.log("login sucses");
-        Navigate("/dashboard");
+        Navigate(`/dashboard?username=${username}`);
       } catch (error) {
         alert("Failed to login", error);
         Navigate("/");
@@ -39,7 +41,6 @@ export function LoginCard() {
     }
   };
 
-  // Fungsi untuk mengirimkan permintaan login ke API
   const loginUser = async (username, password) => {
     const response = await fetch(
       "https://dummy-api-umber.vercel.app/auth/login",
@@ -60,11 +61,12 @@ export function LoginCard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const storedUsername = localStorage.getItem("username");
   useEffect(() => {
     const fetchLoginStatus = async () => {
       try {
         const response = await fetch(
-          "https://dummy-api-umber.vercel.app/auth/status"
+          `https://dummy-api-umber.vercel.app/auth/status/${storedUsername}`
         );
         if (response.ok) {
           const data = await response.json();
