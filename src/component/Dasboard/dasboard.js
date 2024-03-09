@@ -7,10 +7,12 @@ function Dasboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    console.log(storedUsername);
     const fetchLoginStatus = async () => {
       try {
         const response = await fetch(
-          "https://dummy-api-umber.vercel.app/auth/status"
+          `https://dummy-api-umber.vercel.app/auth/status/${storedUsername}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -25,18 +27,14 @@ function Dasboard() {
         setIsLoading(false);
       }
     };
-
     fetchLoginStatus();
   }, []);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
-
   return (
     <div>
       <Main />
