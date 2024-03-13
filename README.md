@@ -1,5 +1,7 @@
 # Dummy API's Faster
 
+![WA-Web Gateway API Logo](./public/logo192.png)
+
 Dummy API's Faster is a tool that allows you to quickly create and run mock API's with random data for your application development needs. With Dummy API's Faster, you can generate fake API endpoints without waiting for actual APIs to be developed, making it easier to prototype and test your application.
 
 ## Features
