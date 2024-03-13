@@ -7,6 +7,7 @@ import SignCard from "./component/login/signin";
 import LoginCard from "./component/login/login";
 import Dasboard from "./component/Dasboard/dasboard";
 import Descard from "./component/card/descard";
+import ScrollTo from "./component/scrollTop/ScrollTo";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,7 +16,7 @@ import {
 } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 toast.configure();
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
         "https://rest-dummy-api.vercel.app/authentication/verify",
         {
           method: "POST",
-          headers: { jwt_token: localStorage.token },
+          headers: { jwt_token: localStorage.getItem("token") },
         }
       );
       const parseRes = await res.json();
@@ -45,54 +46,51 @@ function App() {
     setIsAuthenticated(boolean);
   };
 
-  console.log(isAuthenticated);
-  console.log(setAuth);
   return (
-    <Fragment>
-      <Router>
-        <NavbarDefault />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/descard" element={<Descard />} />
-          <Route
-            path="/login"
-            element={
-              !isAuthenticated ? (
-                <LoginCard setAuth={setAuth} />
-              ) : (
-                <Navigate to="/dashboard" />
-              )
-            }
-          />
+    <Router>
+      <ScrollTo />
+      <NavbarDefault IsAuthenticated={isAuthenticated} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/descard" element={<Descard />} />
+        <Route
+          path="/login"
+          element={
+            !isAuthenticated ? (
+              <LoginCard setAuth={setAuth} />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }
+        />
 
-          <Route
-            exact
-            path="/signin"
-            element={
-              !isAuthenticated ? (
-                <SignCard setAuth={setAuth} />
-              ) : (
-                <Navigate to="/dashboard" />
-              )
-            }
-          />
+        <Route
+          exact
+          path="/signin"
+          element={
+            !isAuthenticated ? (
+              <SignCard setAuth={setAuth} />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }
+        />
 
-          <Route
-            exact
-            path="/dashboard"
-            element={
-              isAuthenticated ? (
-                <Dasboard setAuth={setAuth} />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route path="*" element={<Status404 to="/" />} />
-        </Routes>
-        <FooterWithLogo />
-      </Router>
-    </Fragment>
+        <Route
+          exact
+          path="/dashboard"
+          element={
+            isAuthenticated ? (
+              <Dasboard setAuth={setAuth} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route path="*" element={<Status404 to="/" />} />
+      </Routes>
+      <FooterWithLogo />
+    </Router>
   );
 }
 

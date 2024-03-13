@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Nav from "./nav";
+function Dashboard({ setAuth }) {
+  const [name, setName] = useState("");
 
-function Dasboard({ setAuth }) {
-  const [name,setName] =useState("") 
-  
   const getProfile = async () => {
     try {
-      const res = await fetch("https://rest-dummy-api.vercel.app/dashboard/", {
+      const res = await fetch("https://rest-dummy-api.vercel.app/dahboard/", {
         method: "POST",
-        headers: { jwt_token: localStorage.token }
+        headers: { jwt_token: localStorage.getItem("token") },
       });
-
       const parseData = await res.json();
       setName(parseData.user_name);
     } catch (err) {
@@ -18,7 +17,7 @@ function Dasboard({ setAuth }) {
     }
   };
 
-  const logout = async e => {
+  const logout = async (e) => {
     e.preventDefault();
     try {
       localStorage.removeItem("token");
@@ -32,16 +31,17 @@ function Dasboard({ setAuth }) {
   useEffect(() => {
     getProfile();
   }, []);
-  
+
+  console.log(name);
   return (
     <div>
-      <h1 className="mt-5">Dashboard</h1>
+      <Nav logout={logout} Name={name} />
       <h2>Welcome {name}</h2>
-      <button onClick={e => logout(e)} className="btn btn-primary">
+      <button onClick={(e) => logout(e)} className="btn btn-primary">
         Logout
       </button>
     </div>
   );
 }
 
-export default Dasboard;
+export default Dashboard;

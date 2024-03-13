@@ -14,23 +14,54 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function SignCard() {
-  // State to store input values
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+import { toast } from "react-toastify";
 
+export function SignCard({ setAuth }) {
+  const [rememberMe, setRememberMe] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(!open);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!rememberMe) {
-      setOpen(!open);
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
+
+  const { email, password, name } = inputs;
+
+  const onChange = (e) =>
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (!rememberMe) {
+        setOpen(!open);
+      }
+      const body = { email, password, name };
+      const response = await fetch(
+        "https://rest-dummy-api.vercel.app/authentication/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+      const parseRes = await response.json();
+
+      if (parseRes.jwtToken) {
+        localStorage.setItem("token", parseRes.jwtToken);
+        setAuth(true);
+        toast.success("Register Successfully");
+      } else {
+        setAuth(false);
+        toast.error(parseRes);
+      }
+    } catch (err) {
+      console.error(err.message);
     }
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
   };
 
   return (
@@ -72,15 +103,28 @@ export function SignCard() {
         <form onSubmit={handleSubmit}>
           <CardBody className="flex flex-col gap-4">
             <Input
-              label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              label="Name"
+              name="name"
+              value={name}
+              onChange={(e) => onChange(e)}
               size="lg"
               required
             />
             <Input
+              type="email"
+              label="Email"
+              name="email"
+              value={email}
+              onChange={(e) => onChange(e)}
+              size="lg"
+              required
+            />
+            <Input
+              type="password"
+              name="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => onChange(e)}
               label="Password"
               size="lg"
               required

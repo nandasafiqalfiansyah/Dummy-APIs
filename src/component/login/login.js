@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { toast } from "react-toastify";
-
+import "react-toastify/dist/ReactToastify.css";
 import {
   Card,
   CardHeader,
@@ -34,34 +34,48 @@ function LoginCard({ setAuth }) {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    try {
-      console.log(email, password);
-      const body = { email, password };
+    if (!rememberMe) {
+      setOpen(!open);
+    } else {
+      e.preventDefault();
+      try {
+        console.log(email, password);
+        const body = { email, password };
 
-      const response = await fetch(
-        "https://rest-dummy-api.vercel.app/authentication/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(body),
+        const response = await fetch(
+          "https://rest-dummy-api.vercel.app/authentication/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(body),
+          }
+        );
+
+        const parseRes = await response.json();
+        console.log(parseRes);
+        if (parseRes.jwtToken) {
+          localStorage.setItem("token", parseRes.jwtToken);
+          setAuth(true);
+          toast.success("Logged in Successfully", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            bodyClassName: "toast-body",
+          });
+        } else {
+          setAuth(false);
+          toast.error(parseRes);
         }
-      );
-
-      const parseRes = await response.json();
-      console.log(parseRes);
-      if (parseRes.jwtToken) {
-        localStorage.setItem("token", parseRes.jwtToken);
-        setAuth(true);
-        toast.success("Logged in Successfully");
-      } else {
-        setAuth(false);
-        toast.error(parseRes);
+      } catch (err) {
+        console.error(err.message);
+        alert(err.message);
       }
-    } catch (err) {
-      console.error(err.message);
-      alert(err.message);
     }
   };
 
@@ -112,7 +126,7 @@ function LoginCard({ setAuth }) {
           <form onSubmit={onSubmitForm}>
             <CardBody className="flex flex-col gap-4">
               <Input
-                type="text"
+                type="email"
                 name="email"
                 value={email}
                 label="email"

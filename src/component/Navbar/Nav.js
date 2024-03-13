@@ -8,9 +8,11 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 
-export function NavbarDefault() {
+export function NavbarDefault({ IsAuthenticated }) {
   const [openNav, setOpenNav] = React.useState(false);
 
+  let isAuthenticated = IsAuthenticated;
+  console.log(isAuthenticated);
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -98,13 +100,19 @@ export function NavbarDefault() {
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
-          href="/"
+          href={isAuthenticated ? "/dashboard" : "/"}
           className="mr-4 cursor-pointer py-1.5 font-medium"
         >
           Dummy API
         </Typography>
+
         <div className="hidden lg:block">{navList}</div>
-        <div className="flex items-center gap-x-1">
+
+        <div
+          className={`flex items-center gap-x-1 ${
+            isAuthenticated ? "hidden" : ""
+          }`}
+        >
           <a href="/login">
             <Button variant="text" size="sm" className="hidden lg:inline-block">
               <span>Log In</span>
@@ -120,6 +128,7 @@ export function NavbarDefault() {
             </Button>
           </a>
         </div>
+
         <IconButton
           variant="text"
           className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -162,7 +171,11 @@ export function NavbarDefault() {
       <Collapse open={openNav}>
         <div className="container mx-auto">
           {navList}
-          <div className="flex items-center gap-x-1">
+          <div
+            className={`flex items-center gap-x-1 ${
+              isAuthenticated ? "hidden" : ""
+            }`}
+          >
             <a href="/login">
               <Button fullWidth variant="text" size="sm" className="">
                 <span>Log In</span>
