@@ -1,43 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
-import Main from "./main";
+import { toast } from "react-toastify";
 
-function Dasboard() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+function Dasboard({ setAuth }) {
+  const [name,setName] =useState("") 
+  
+  const getProfile = async () => {
+    try {
+      const res = await fetch("https://rest-dummy-api.vercel.app/dashboard/", {
+        method: "POST",
+        headers: { jwt_token: localStorage.token }
+      });
+
+      const parseData = await res.json();
+      setName(parseData.user_name);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const logout = async e => {
+    e.preventDefault();
+    try {
+      localStorage.removeItem("token");
+      setAuth(false);
+      toast.success("Logout successfully");
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    console.log(storedUsername);
-    const fetchLoginStatus = async () => {
-      try {
-        const response = await fetch(
-          `https://dummy-api-umber.vercel.app/auth/status/${storedUsername}`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setIsLoggedIn(data.isLoggedIn);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error("Error fetching login status:", error);
-        setIsLoggedIn(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchLoginStatus();
+    getProfile();
   }, []);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
+  
   return (
     <div>
-      <Main />
+      <h1 className="mt-5">Dashboard</h1>
+      <h2>Welcome {name}</h2>
+      <button onClick={e => logout(e)} className="btn btn-primary">
+        Logout
+      </button>
     </div>
   );
 }
