@@ -49,13 +49,12 @@ export function SignCard({ setAuth }) {
         }
       );
       const parseRes = await response.json();
-
+      toast.success("Register Successfully");
+      alert("Register Successfully");
+      window.location.href = "/dashboard";
       if (parseRes.jwtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
         setAuth(true);
-        toast.success("Register Successfully");
-        window.location.href = "/login";
-        return;
       } else {
         setAuth(false);
         toast.error(parseRes);
