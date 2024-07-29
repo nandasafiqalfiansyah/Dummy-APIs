@@ -42,22 +42,19 @@ export function SignCard({ setAuth }) {
         "https://rest-dummy-api.vercel.app/authentication/register",
         {
           method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(body),
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(body),
         }
       );
       const parseRes = await response.json();
-      if (response.status === 200) {
-        await toast.success("Register Successfully");
-        window.location.href = "/login";
-        return;
-      }else{
-        await toast.error(parseRes.message);
-      }
-      if (response.status === 400) {
-        toast.error(parseRes.message);
+      console.log(parseRes);
+      if (parseRes.length !== 0) {
+        toast.success("Successfully signed in");
+        window.location("/login");
+      } else {
+        toast.error(parseRes);
       }
     } catch (err) {
      toast.error(err.message);
