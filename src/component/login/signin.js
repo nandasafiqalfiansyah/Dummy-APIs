@@ -13,7 +13,6 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
 import { toast } from "react-toastify";
 
 export function SignCard({ setAuth }) {
@@ -55,6 +54,8 @@ export function SignCard({ setAuth }) {
         localStorage.setItem("token", parseRes.jwtToken);
         setAuth(true);
         toast.success("Register Successfully");
+        window.location.href = "/login";
+        return;
       } else {
         setAuth(false);
         toast.error(parseRes);
