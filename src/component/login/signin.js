@@ -49,18 +49,18 @@ export function SignCard({ setAuth }) {
         }
       );
       const parseRes = await response.json();
-      toast.success("Register Successfully");
-      alert("Register Successfully");
-      window.location.href = "/dashboard";
-      if (parseRes.jwtToken) {
-        localStorage.setItem("token", parseRes.jwtToken);
-        setAuth(true);
-      } else {
-        setAuth(false);
-        toast.error(parseRes);
+      if (response.status === 200) {
+        await toast.success("Register Successfully");
+        window.location.href = "/login";
+        return;
+      }else{
+        await toast.error(parseRes.message);
+      }
+      if (response.status === 400) {
+        toast.error(parseRes.message);
       }
     } catch (err) {
-      console.error(err.message);
+     toast.error(err.message);
     }
   };
 
