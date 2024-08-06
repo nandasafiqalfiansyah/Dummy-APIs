@@ -39,7 +39,6 @@ function LoginCard({ setAuth }) {
     } else {
       e.preventDefault();
       try {
-        console.log(email, password);
         const body = { email, password };
         const response = await fetch(
           "https://rest-dummy-api.vercel.app/user/login",
@@ -53,7 +52,7 @@ function LoginCard({ setAuth }) {
         );
         const parseRes = await response.json();
         console.log(parseRes.payload);
-        if (parseRes.payload) {
+        if (parseRes.payload !== null) {
           localStorage.setItem("token", parseRes.payload);
           toast.success("Logged in Successfully", {
             position: toast.POSITION.TOP_RIGHT,
@@ -67,7 +66,7 @@ function LoginCard({ setAuth }) {
           });
         } else {
           setAuth(false);
-          toast.error(parseRes);
+          toast.error(parseRes.message);
         }
       } catch (err) {
         console.error(err.message);
