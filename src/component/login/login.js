@@ -41,7 +41,6 @@ function LoginCard({ setAuth }) {
       try {
         console.log(email, password);
         const body = { email, password };
-
         const response = await fetch(
           "https://rest-dummy-api.vercel.app/user/login",
           {
@@ -52,12 +51,10 @@ function LoginCard({ setAuth }) {
             body: JSON.stringify(body),
           }
         );
-
         const parseRes = await response.json();
         console.log(parseRes.payload);
         if (parseRes.payload) {
           localStorage.setItem("token", parseRes.payload);
-          setAuth(true);
           toast.success("Logged in Successfully", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000,
