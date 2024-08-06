@@ -165,7 +165,7 @@ function LoginCard({ setAuth }) {
                 />
               </div>
               <ReCAPTCHA
-                sitekey="6LfW8SAqAAAAABiDIgf7c1zQl2vzcM3Whf6UFGgF"
+                sitekey="6LcX8iAqAAAAALK2sCidHZog0Yy4tlMk4ZuBqGb8"
                 onChange={handleRecaptchaChange}
               />
             </CardBody>
