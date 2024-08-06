@@ -1,10 +1,12 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
+const { useState } = require("react");
 
 const navigation = [
   { name: "Dashboard", href: "#", current: false },
-  { name: "Team", href: "#", current: false },
+  { name: "Team", href: "/team", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
   { name: "Reports", href: "#", current: false },
@@ -14,12 +16,23 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function nav({ logout, Name }) {
+export default function Nav({ logout }) {
+  const [userData, setUserData] = useState([]);
+  useEffect(() => {
+    axios
+      .get("https://rest-dummy-api.vercel.app/user", {
+        headers: { jwt_token: localStorage.token },
+      })
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const user = {
-    name: Name,
-    email: "tom@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    name: userData.name,
+    email: userData.email,
+    imageUrl: `${userData.url_profile}`,
   };
 
   const userNavigation = [

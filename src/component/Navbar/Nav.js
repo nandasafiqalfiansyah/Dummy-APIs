@@ -100,7 +100,7 @@ export function NavbarDefault({ IsAuthenticated }) {
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
-          href={isAuthenticated ? "/dashboard" : "/"}
+          href={isAuthenticated ? "/" : "/"}
           className="mr-4 cursor-pointer py-1.5 font-medium"
         >
           Dummy API
@@ -125,6 +125,22 @@ export function NavbarDefault({ IsAuthenticated }) {
               className="hidden lg:inline-block"
             >
               <span>Sign in</span>
+            </Button>
+          </a>
+        </div>
+
+        <div
+          className={`flex items-center gap-x-1 ${
+            isAuthenticated ? "" : "hidden"
+          }`}
+        >
+          <a href="/dashboard">
+            <Button
+              variant="gradient"
+              size="sm"
+              className="hidden lg:inline-block"
+            >
+              <span>Dashboard</span>
             </Button>
           </a>
         </div>
@@ -184,6 +200,17 @@ export function NavbarDefault({ IsAuthenticated }) {
             <a href="/signin">
               <Button fullWidth variant="gradient" size="sm" className="">
                 <span>Sign in</span>
+              </Button>
+            </a>
+          </div>
+          <div
+            className={`flex items-center gap-x-1 ${
+              isAuthenticated ? "" : "hidden"
+            }`}
+          >
+            <a href="/dashboard">
+              <Button fullWidth variant="gradient" size="sm" className="">
+                <span>Dashboard</span>
               </Button>
             </a>
           </div>

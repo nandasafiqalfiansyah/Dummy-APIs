@@ -17,9 +17,7 @@ import { toast } from "react-toastify";
 
 export function SignCard({ setAuth }) {
   const [rememberMe, setRememberMe] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(!open);
-
+  const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -27,7 +25,7 @@ export function SignCard({ setAuth }) {
   });
 
   const { email, password, name } = inputs;
-
+  const handleOpen = () => setOpen(!open);
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
@@ -35,29 +33,31 @@ export function SignCard({ setAuth }) {
     e.preventDefault();
     try {
       if (!rememberMe) {
-        setOpen(!open);
+        setOpen(true);
+        return;
       }
       const body = { email, password, name };
       const response = await fetch(
-        "https://rest-dummy-api.vercel.app/authentication/register",
+        "https://rest-dummy-api.vercel.app/user/register",
         {
           method: "POST",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify(body),
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(body),
         }
       );
       const parseRes = await response.json();
       console.log(parseRes);
       if (parseRes.length !== 0) {
         toast.success("Successfully signed in");
-        window.location("/login");
       } else {
         toast.error(parseRes);
       }
     } catch (err) {
-     toast.error(err.message);
+      console.log(err);
+      toast.error("Something went wrong");
+      return;
     }
   };
 
@@ -77,10 +77,13 @@ export function SignCard({ setAuth }) {
         </DialogBody>
         <DialogBody>by nanda safiq alfiansyah</DialogBody>
         <DialogFooter>
-          <Button variant="text" color="red" className="mr-1">
-            <a href="/">
-              <span>Cancel</span>
-            </a>
+          <Button
+            variant="text"
+            color="red"
+            className="mr-1"
+            onClick={handleOpen}
+          >
+            <span>Cancel</span>
           </Button>
           <Button variant="gradient" onClick={handleOpen}>
             <span>Agree</span>
@@ -104,7 +107,7 @@ export function SignCard({ setAuth }) {
               label="Name"
               name="name"
               value={name}
-              onChange={(e) => onChange(e)}
+              onChange={onChange}
               size="lg"
               required
             />
@@ -113,7 +116,7 @@ export function SignCard({ setAuth }) {
               label="Email"
               name="email"
               value={email}
-              onChange={(e) => onChange(e)}
+              onChange={onChange}
               size="lg"
               required
             />
@@ -121,7 +124,7 @@ export function SignCard({ setAuth }) {
               type="password"
               name="password"
               value={password}
-              onChange={(e) => onChange(e)}
+              onChange={onChange}
               label="Password"
               size="lg"
               required
@@ -138,7 +141,6 @@ export function SignCard({ setAuth }) {
             <Button type="submit" variant="gradient" fullWidth>
               Sign in
             </Button>
-
             <Typography variant="small" className="mt-6 flex justify-center">
               have an account?
               <Typography
@@ -157,4 +159,5 @@ export function SignCard({ setAuth }) {
     </div>
   );
 }
+
 export default SignCard;

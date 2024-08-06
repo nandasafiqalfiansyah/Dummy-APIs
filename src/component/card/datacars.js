@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const usePayloadData = () => {
   const [payloadData, setPayloadData] = useState([]);
-
   useEffect(() => {
     fetch("https://rest-dummy-api.vercel.app/card")
       .then((response) => response.json())
@@ -11,7 +10,10 @@ const usePayloadData = () => {
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
-
+  if (!payloadData) {
+    return null;
+  }
+  console.log(payloadData);
   return payloadData;
 };
 
