@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReCAPTCHA from "react-google-recaptcha";
 import {
   Card,
   CardHeader,
@@ -17,62 +18,79 @@ import {
 } from "@material-tailwind/react";
 
 function LoginCard({ setAuth }) {
-  console.log(setAuth);
   const [rememberMe, setRememberMe] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(!open);
-
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
+  const [recaptchaValue, setRecaptchaValue] = useState(null);
 
   const { email, password } = inputs;
+
+  const handleOpen = () => setOpen(!open);
 
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
+
     if (!rememberMe) {
       setOpen(!open);
-    } else {
-      e.preventDefault();
-      try {
-        const body = { email, password };
-        const response = await fetch(
-          "https://rest-dummy-api.vercel.app/user/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify(body),
-          }
-        );
-        const parseRes = await response.json();
-        console.log(parseRes.payload);
-        if (parseRes.payload !== null) {
-          localStorage.setItem("token", parseRes.payload);
-          toast.success("Logged in Successfully", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            bodyClassName: "toast-body",
-          });
-        } else {
-          setAuth(false);
-          toast.error(parseRes.message);
-        }
-      } catch (err) {
-        console.error(err.message);
-        alert(err.message);
-      }
+      return; // Exit early if the `rememberMe` condition is not met
     }
+
+    if (!recaptchaValue) {
+      toast.error("Please complete the CAPTCHA");
+      return; // Exit early if CAPTCHA is not completed
+    }
+
+    try {
+      const body = { email, password, recaptchaValue };
+      const response = await fetch(
+        "https://rest-dummy-api.vercel.app/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      const parseRes = await response.json();
+
+      // Handle different HTTP status codes
+      const errorStatusCodes = [404, 400, 500, 401, 403];
+      if (errorStatusCodes.includes(parseRes.statusCode)) {
+        toast.error(parseRes.message || "An error occurred");
+        setAuth(false);
+      } else if (parseRes.payload && Object.keys(parseRes.payload).length > 0) {
+        localStorage.setItem("token", parseRes.payload);
+        setAuth(true);
+        toast.success("Logged in Successfully", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          bodyClassName: "toast-body",
+        });
+      } else {
+        setAuth(false);
+        toast.error(parseRes);
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+      console.error(err.message);
+    }
+  };
+
+  const handleRecaptchaChange = (value) => {
+    setRecaptchaValue(value);
   };
 
   return (
@@ -125,7 +143,7 @@ function LoginCard({ setAuth }) {
                 type="email"
                 name="email"
                 value={email}
-                label="email"
+                label="Email"
                 onChange={(e) => onChange(e)}
                 size="lg"
                 required
@@ -143,9 +161,13 @@ function LoginCard({ setAuth }) {
                 <Checkbox
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  label="agree terms this website"
+                  label="Agree to terms of this website"
                 />
               </div>
+              <ReCAPTCHA
+                sitekey="6LfW8SAqAAAAABiDIgf7c1zQl2vzcM3Whf6UFGgF"
+                onChange={handleRecaptchaChange}
+              />
             </CardBody>
             <CardFooter className="pt-0">
               <Button type="submit" variant="gradient" fullWidth>
