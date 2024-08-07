@@ -3,8 +3,8 @@ import NavbarDefault from "./component/Navbar/Nav";
 import FooterWithLogo from "./component/Footer/footer";
 import Home from "./component/Home";
 import Status404 from "./component/404/404";
-import SignCard from "./component/login/signin";
-import LoginCard from "./component/login/login";
+import SignCard from "./component/auth/signin";
+import LoginCard from "./component/auth/login";
 import Dasboard from "./component/Dasboard/dasboard";
 import Descard from "./component/card/descard";
 import ScrollTo from "./component/scrollTop/ScrollTo";
@@ -38,48 +38,50 @@ function App() {
 
   return (
     <Router>
-      <ScrollTo />
-      <NavbarDefault IsAuthenticated={isAuthenticated} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/descard" element={<Descard />} />
-        <Route
-          path="/login"
-          element={
-            !isAuthenticated ? (
-              <LoginCard setAuth={setAuth} />
-            ) : (
-              <Navigate to="/dashboard" />
-            )
-          }
-        />
+      <div className="bg-white dark:bg-gray-800 ">
+        <ScrollTo />
+        <NavbarDefault IsAuthenticated={isAuthenticated} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/descard" element={<Descard />} />
+          <Route
+            path="/login"
+            element={
+              !isAuthenticated ? (
+                <LoginCard setAuth={setAuth} />
+              ) : (
+                <Navigate to="/dashboard" />
+              )
+            }
+          />
 
-        <Route
-          exact
-          path="/signin"
-          element={
-            !isAuthenticated ? (
-              <SignCard setAuth={setAuth} />
-            ) : (
-              <Navigate to="/dashboard" />
-            )
-          }
-        />
+          <Route
+            exact
+            path="/signin"
+            element={
+              !isAuthenticated ? (
+                <SignCard setAuth={setAuth} />
+              ) : (
+                <Navigate to="/dashboard" />
+              )
+            }
+          />
 
-        <Route
-          exact
-          path="/dashboard"
-          element={
-            isAuthenticated ? (
-              <Dasboard setAuth={setAuth} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route path="*" element={<Status404 to="/" />} />
-      </Routes>
-      <FooterWithLogo />
+          <Route
+            exact
+            path="/dashboard"
+            element={
+              isAuthenticated ? (
+                <Dasboard setAuth={setAuth} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route path="*" element={<Status404 to="/" />} />
+        </Routes>
+        <FooterWithLogo />
+      </div>
     </Router>
   );
 }

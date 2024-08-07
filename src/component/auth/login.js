@@ -24,7 +24,7 @@ function LoginCard({ setAuth }) {
     email: "",
     password: "",
   });
-  const [recaptchaValue, setRecaptchaValue] = useState(null); ///set
+  const [recaptchaValue, setRecaptchaValue] = useState(true); ///set
 
   const { email, password } = inputs;
 
@@ -64,21 +64,20 @@ function LoginCard({ setAuth }) {
       // Handle different HTTP status codes
       const errorStatusCodes = [404, 400, 500, 401, 403];
       if (errorStatusCodes.includes(parseRes.statusCode)) {
-        toast.error(parseRes.message || "An error occurred");
-        setAuth(false);
-      } else if (parseRes.payload && Object.keys(parseRes.payload).length > 0) {
-        localStorage.setItem("token", parseRes.payload);
-        setAuth(true);
-        toast.success("Logged in Successfully", {
+        toast.error(parseRes.message || "An error occurred", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: false,
-          progress: undefined,
           bodyClassName: "toast-body",
         });
+        setAuth(false);
+      } else if (parseRes.payload && Object.keys(parseRes.payload).length > 0) {
+        localStorage.setItem("token", parseRes.payload);
+        setAuth(true);
+        toast.success("Logged in Successfully");
       } else {
         setAuth(false);
         toast.error(parseRes);

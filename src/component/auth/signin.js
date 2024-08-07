@@ -49,13 +49,18 @@ export function SignCard({ setAuth }) {
       );
       const parseRes = await response.json();
       console.log(parseRes);
-      if (parseRes.length !== 0) {
-        toast.success("Successfully signed in");
+      const errorStatusCodes = [404, 400, 500, 401, 403];
+      if (errorStatusCodes.includes(parseRes.statusCode)) {
+        toast.error(parseRes.message || "An error occurred");
+        setAuth(false);
+      } else if (parseRes.statusCode === 200) {
+        await toast.success("Register Successfully");
+        window.location.href = "/login";
       } else {
         toast.error(parseRes);
+        return;
       }
     } catch (err) {
-      console.log(err);
       toast.error("Something went wrong");
       return;
     }

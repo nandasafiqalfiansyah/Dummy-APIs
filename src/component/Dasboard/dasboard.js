@@ -28,9 +28,13 @@ function Dashboard({ setAuth }) {
 
   const getProfile = async () => {
     try {
-      const res = await axios.get("https://rest-dummy-api.vercel.app/card", {
-        headers: { jwt_token: localStorage.token },
-      });
+      const res = await axios.get(
+        "https://rest-dummy-api.vercel.app/user/card",
+        {
+          headers: { jwt_token: localStorage.token },
+        }
+      );
+      console.log(res.data);
       setDatacard(res.data.payload);
     } catch (err) {
       console.error(err.message);

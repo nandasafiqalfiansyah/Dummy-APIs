@@ -5,8 +5,8 @@ const tahun = date.getFullYear();
 
 export function FooterWithLogo() {
   return (
-    <footer className="w-full bg-white p-8">
-      <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-white text-center md:justify-between">
+    <footer className="w-full  p-8">
+      <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 text-center md:justify-between">
         <img
           src="https://docs.material-tailwind.com/img/logo-ct-dark.png"
           alt="logo-ct"
@@ -18,7 +18,7 @@ export function FooterWithLogo() {
               as="a"
               href="#"
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500  dark:text-gray-300"
             >
               About Us
             </Typography>
@@ -28,7 +28,7 @@ export function FooterWithLogo() {
               as="a"
               href="#"
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500 dark:text-gray-300"
             >
               License
             </Typography>
@@ -38,7 +38,7 @@ export function FooterWithLogo() {
               as="a"
               href="#"
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500 dark:text-gray-300"
             >
               Contribute
             </Typography>
@@ -48,15 +48,18 @@ export function FooterWithLogo() {
               as="a"
               href="#"
               color="blue-gray"
-              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+              className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500 dark:text-gray-300"
             >
               Contact Us
             </Typography>
           </li>
         </ul>
       </div>
-      <hr className="my-8 border-blue-gray-50" />
-      <Typography color="blue-gray" className="text-center font-normal">
+      <hr className="my-8 border-blue-gray-50 dark:text-gray-300" />
+      <Typography
+        color="blue-gray"
+        className="text-center font-normal dark:text-gray-300"
+      >
         &copy; {tahun} Nanda safiq Alfiansyah
       </Typography>
     </footer>
