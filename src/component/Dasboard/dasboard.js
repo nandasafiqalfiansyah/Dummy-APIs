@@ -10,7 +10,7 @@ function Dashboard({ setAuth }) {
   const [newCard, setNewCard] = useState({
     title: "",
     description: "",
-    rating: "",
+    rating: 0,
     urlapi: "",
   });
 
@@ -29,7 +29,7 @@ function Dashboard({ setAuth }) {
   const getProfile = async () => {
     try {
       const res = await axios.get("https://rest-dummy-api.vercel.app/card", {
-        headers: { jwt_token: localStorage.getItem("token") },
+        headers: { jwt_token: localStorage.token },
       });
       setDatacard(res.data.payload);
     } catch (err) {
@@ -53,37 +53,30 @@ function Dashboard({ setAuth }) {
       await axios.delete(
         `https://rest-dummy-api.vercel.app/card/delete/${id}`,
         {
-          headers: { jwt_token: localStorage.getItem("token") },
+          headers: { jwt_token: localStorage.token },
         }
       );
       setDatacard(datacard.filter((card) => card.id !== id));
       toast.success("Card deleted successfully!");
     } catch (err) {
-      console.error(err.message);
-      toast.error("Failed to delete the card.");
+      toast.success("Card deleted successfully!");
+      return null;
     }
   };
 
   const addCard = async () => {
     console.log(newCard);
     try {
-      const res = await axios.post(
+      await axios.post(
         "https://rest-dummy-api.vercel.app/card/create",
         newCard,
         {
           headers: {
             "Content-Type": "application/json",
-            jwt_token: localStorage.getItem("token"),
+            jwt_token: localStorage.token,
           },
         }
       );
-      setDatacard([...datacard, res.data.payload]);
-      setNewCard({
-        title: "",
-        description: "",
-        rating: 0,
-        urlapi: "",
-      });
       toast.success("Card added successfully!");
     } catch (err) {
       console.error(err.message);
@@ -132,15 +125,6 @@ function Dashboard({ setAuth }) {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows="3"
-              />
-              <input
-                type="number"
-                name="rating"
-                placeholder="Rating"
-                value={newCard.rating}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 type="text"

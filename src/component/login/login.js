@@ -24,7 +24,7 @@ function LoginCard({ setAuth }) {
     email: "",
     password: "",
   });
-  const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [recaptchaValue, setRecaptchaValue] = useState(null); ///set
 
   const { email, password } = inputs;
 
@@ -165,7 +165,7 @@ function LoginCard({ setAuth }) {
                 />
               </div>
               <ReCAPTCHA
-                sitekey="6LcX8iAqAAAAALK2sCidHZog0Yy4tlMk4ZuBqGb8"
+                sitekey="6Lc4OiEqAAAAAIvYfY_gHl35mJqtdTtFj7rt4mx_"
                 onChange={handleRecaptchaChange}
               />
             </CardBody>
