@@ -24,7 +24,7 @@ function LoginCard({ setAuth }) {
     email: "",
     password: "",
   });
-  const [recaptchaValue, setRecaptchaValue] = useState(true); ///set
+  const [recaptchaValue, setRecaptchaValue] = useState(false); ///set
 
   const { email, password } = inputs;
 
