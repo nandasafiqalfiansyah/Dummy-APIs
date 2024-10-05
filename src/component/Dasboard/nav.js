@@ -6,8 +6,8 @@ const { useState } = require("react");
 
 const navigation = [
   { name: "Dashboard", href: "#", current: false },
-  { name: "Team", href: "/team", current: false },
-  { name: "Projects", href: "#", current: false },
+  // { name: "Team", href: "/team", current: false },
+  // { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
   { name: "Reports", href: "#", current: false },
 ];

@@ -29,7 +29,7 @@ function Dashboard({ setAuth }) {
   const getProfile = async () => {
     try {
       const res = await axios.get(
-        "https://rest-dummy-api.vercel.app/user/card",
+        "https://rest-dummy-api.vercel.app/card/user/card",
         {
           headers: { jwt_token: localStorage.token },
         }
